@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Message For You</title>
+    <style>
+        :root {
+            --bg-color: #fce4ec;
+            --envelope-color: #f06292;
+            --flap-color: #d81b60;
+            --letter-bg: #ffffff;
+            --text-color: #4a4a4a;
+            --heart-color: #ff4081;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: var(--bg-color);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        /* The Envelope Container */
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .envelope-wrapper:hover {
+            transform: scale(1.05);
+        }
+
+        .envelope {
+            position: relative;
+            width: 300px;
+            height: 200px;
+            background-color: var(--envelope-color);
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        /* Front flap of the envelope */
+        .envelope::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            z-index: 2;
+            border-top: 110px solid var(--flap-color);
+            border-left: 150px solid transparent;
+            border-right: 150px solid transparent;
+            transform-origin: top;
+            transition: transform 0.5s ease;
+        }
+
+        /* Side pockets */
+        .envelope::after {
+            content: "";
+            position: absolute;
+            z-index: 3;
+            width: 0;
+            height: 0;
+            border-top: 100px solid transparent;
+            border-bottom: 100px solid var(--envelope-color);
+            border-left: 150px solid #ec407a;
+            border-right: 150px solid #ec407a;
+            border-radius: 0 0 10px 10px;
+        }
+
+        /* The actual letter */
+        .letter {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            width: 280px;
+            height: 180px;
+            background: var(--letter-bg);
+            padding: 20px;
+            box-sizing: border-box;
+            border-radius: 5px;
+            z-index: 1;
+            transition: transform 0.5s ease, bottom 0.5s ease;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .letter h2 {
+            font-size: 18px;
+            color: var(--flap-color);
+            margin-bottom: 10px;
+        }
+
+        .letter p {
+            font-size: 14px;
+            line-height: 1.4;
+            color: var(--text-color);
+        }
+
+        /* Animation when opened */
+        .envelope-wrapper.open .envelope::before {
+            transform: rotateX(180deg);
+            z-index: 0;
+        }
+
+        .envelope-wrapper.open .letter {
+            transform: translateY(-120px);
+            z-index: 4;
+            height: auto;
+            min-height: 250px;
+        }
+
+        /* Floating Hearts */
+        .heart {
+            position: absolute;
+            color: var(--heart-color);
+            font-size: 20px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-200px) scale(1.5); opacity: 0; }
+        }
+
+        .instruction {
+            position: absolute;
+            bottom: 50px;
+            color: var(--flap-color);
+            font-weight: bold;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="envelope-wrapper" id="envelope">
+        <div class="envelope"></div>
+        <div class="letter">
+            <h2>Hey Beautiful Devanshi,</h2>
+            <p>
+                I just wanted to take a second to tell you how much you mean to me. 
+                You make every day brighter just by being in it. I love you i am sorry for shouting today and i'll never touch you in bad way or beat you baby<br><br>
+                <b>I love you sooo much my cutiepie! ❤️</b>
+            </p>
+        </div>
+    </div>
+
+    <div class="instruction" id="instruction">Click to open</div>
+
+    <script>
+        const envelope = document.getElementById('envelope');
+        const instruction = document.getElementById('instruction');
+
+        envelope.addEventListener('click', () => {
+            envelope.classList.toggle('open');
+            instruction.style.display = 'none';
+
+            if (envelope.classList.contains('open')) {
+                createHearts();
+            }
+        });
+
+        function createHearts() {
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.innerHTML = '❤️';
+                    heart.classList.add('heart');
+                    heart.style.left = (Math.random() * 100 + 100) + 'px';
+                    heart.style.top = '100px';
+                    heart.style.left = (Math.random() * 300) + 'px';
+                    heart.style.animation = `floatUp ${2 + Math.random() * 2}s ease-out forwards`;
+                    envelope.appendChild(heart);
+                    
+                    // Remove heart after animation
+                    setTimeout(() => heart.remove(), 4000);
+                }, i * 200);
+            }
+        }
+    </script>
+</body>
+</html>
